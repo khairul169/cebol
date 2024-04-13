@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { basicAuth } from "hono/basic-auth";
 import HomePage from "../views/pages/home";
 import LinksSection from "../views/sections/links";
 import db from "../lib/database";
@@ -6,6 +7,13 @@ import { randomChars } from "../lib/utils";
 import type { Link } from "../types/link";
 
 const router = new Hono();
+
+router.use(
+  basicAuth({
+    username: process.env.AUTH_USERNAME || "cebol",
+    password: process.env.AUTH_PASSWORD || "cebol",
+  })
+);
 
 router.get("/", (c) => {
   const links = db
